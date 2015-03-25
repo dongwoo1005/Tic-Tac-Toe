@@ -1,0 +1,11 @@
+game movesX2.txt stdin
+S
+SW
+SE
+C
+NE
+W
+NW
+N
+E
+quit

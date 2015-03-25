@@ -1,0 +1,42 @@
+#!/bin/bash
+
+if [ ${#} -ne 2 ] ; then
+   echo "Error: Received ${#} arguments. Number of arguments should be 2." 1>&2
+   exit 1;
+
+else
+
+i=1 #counter
+t=$(wc -l ${1} | awk '{print $1}') #total number of lines for arg2
+while [ ${i} -le ${t} ] ; do
+   ithfile=$(cat ${1} | head -${i} | tail -1) #extracting ith line from the suite-file
+   inputfile=${ithfile}.in #ithfile.in file name
+   outputfile=${ithfile}.out #ithfile.out file name
+   argfile=${ithfile}.args #ithfile.args file name
+   if [ ! -e ${inputfile} -o ! -r ${inputfile} ] ; then
+      echo "Error: ${inputfile} does not exist or unreadable." 1>&2
+      exit 1;
+   elif [ ! -e ${outputfile} -o ! -r ${outputfile} ] ; then
+      echo "Error:  ${outputfile} does not exist or unreradable." 1>&2
+      exit 1;
+   else
+   
+      ifilein=$(cat ${ithfile}.in) #ithfile.in file content
+      ifileout=$(cat ${ithfile}.out) #ithfile.out file content
+      tmpdir=mktemp #temp file directory to save actual output
+      if [ -e ${argfile} ] ; then
+         ifilearg=$(cat ${ithfile}.args) #ithfile.args file content
+         ${2} ${ifilearg} < ${inputfile} > ${tmpdir}  # run the program when theres arg
+      else
+         ${2} < ${inputfile} > ${tmpdir} # run the program when theres no arg
+      fi
+   fi
+   actual=$(cat ${tmpdir}) #actual output content
+   diff ${tmpdir} ${outputfile} > /dev/null #compare
+   if [ ${?} -eq 1 ] ; then
+      echo -e "Test failed: ${ithfile}\nInput:\n${ifilein}\nExpected:\n${ifileout}\nActual:\n${actual}"
+   fi
+   rm ${tmpdir} #remove temp file
+   i=$(( $i + 1))
+done
+fi

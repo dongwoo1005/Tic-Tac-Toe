@@ -1,0 +1,7 @@
+game stdin movesO2.txt
+C
+NE
+W
+NW
+N
+quit

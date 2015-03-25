@@ -1,0 +1,10 @@
+provided1
+provided2
+quit
+basic_draw1
+play2games
+basic_draw2
+play3games
+stdin+file
+stdin+file2
+drawsinarow
