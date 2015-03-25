@@ -1,2 +1,2 @@
 # Tic-Tac-Toe
-Tic-Tac-Toe game in C++
+Tic-Tac-Toe game in C++ (observer + singleton pattern)
